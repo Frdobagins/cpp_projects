@@ -34,10 +34,10 @@ bool check_same_location(array<int, 2> object1, array<int, 2> object2) {
 
 bool check_if_neighboring(array<int, 2> hunterPos, array<int, 2> objectPos) {
     bool neighboring = false;
-    neighboring += check_same_location({hunterPos[0]++, hunterPos[1]}, {objectPos[0], objectPos[1]});
-    neighboring += check_same_location({hunterPos[0]--, hunterPos[1]}, {objectPos[0], objectPos[1]});
-    neighboring += check_same_location({hunterPos[0], hunterPos[1]++}, {objectPos[0], objectPos[1]});
-    neighboring += check_same_location({hunterPos[0], hunterPos[1]--}, {objectPos[0], objectPos[1]});
+    neighboring += check_same_location({hunterPos[0]+1, hunterPos[1]}, {objectPos[0], objectPos[1]});
+    neighboring += check_same_location({hunterPos[0]-1, hunterPos[1]}, {objectPos[0], objectPos[1]});
+    neighboring += check_same_location({hunterPos[0], hunterPos[1]+1}, {objectPos[0], objectPos[1]});
+    neighboring += check_same_location({hunterPos[0], hunterPos[1]-1}, {objectPos[0], objectPos[1]});
     return neighboring;
 }
 
@@ -106,6 +106,7 @@ void move_hero(array<int, 2> caveSize, array<int, 2> *pHunterPos) {
         newPos = *pHunterPos;
         cout << "Which direction would you like to move? (N, E, S, W) :"; cin >> pInput;
         if(inputMap.find(pInput) != inputMap.end()) {
+            pInput = (char)tolower(pInput);
             newPos[0] += inputMap[pInput][0];
             newPos[1] += inputMap[pInput][1];
         } else {
@@ -136,6 +137,7 @@ void hero_shoot(array<int, 2> caveSize, array<int, 2> hunterPos, array<int, 2> w
     
     do{
         cout << "In which direction would you like to shoot? (N, E, W, S) : "; cin >> pInput;
+        pInput = (char)tolower(pInput);
         if (inputMap.find(pInput) != inputMap.end()) {
             for (int i = 0; i <=5; i++) {
                 arrowPos[inputMap[pInput][0]] += inputMap[pInput][1];
@@ -170,10 +172,10 @@ void move_object(array<int, 2> caveSize, array<int, 2> *pObjectPos) {
 }
 
 void check_nearby(map<string, array<int, 2>> lWorldMap) {
-    if (check_if_neighboring(lWorldMap["Hunterpos"], lWorldMap["Pit1Pos"]) || check_if_neighboring(lWorldMap["Hunterpos"], lWorldMap["Pit2Pos"])) {
+    if (check_if_neighboring(lWorldMap["HunterPos"], lWorldMap["Pit1Pos"]) || check_if_neighboring(lWorldMap["HunterPos"], lWorldMap["Pit2Pos"])) {
         cout << "You feel a strong breeze pass you by." << endl;
     }
-    if (check_if_neighboring(lWorldMap["Hunterpos"], lWorldMap["WumpusPos"])) {
+    if (check_if_neighboring(lWorldMap["HunterPos"], lWorldMap["WumpusPos"])) {
         cout << "You smell a foul stench." << endl;
     }
     return;
